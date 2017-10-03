@@ -17,6 +17,10 @@ RESPONSE_ERROR = 400
 
 
 class Server:
+    '''
+    >>> server = Server('127.0.0.1', 7777)
+    TYPAN SERVER IS RUNNING...
+    '''
 
     def __init__(self, addr, port):
         try:
@@ -29,7 +33,6 @@ class Server:
             sys.exit(1)
 
     def send_response(self, code, client, addr):
-        
         repr_response = server_message(code, HTTPStatus.OK.phrase)
         response = json.dumps(repr_response)
         try:
@@ -48,12 +51,15 @@ class Server:
         self.send_response(code, client, addr)
 
     def start(self):
+
         while True:
             client, addr = self.sock.accept()
             data = client.recv(MAX_DATA_RECEIVE)
             self.parse_data_from_clietn(client, addr, data)
 
 if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
     parser = create_parser('server', 'TYPAN server')
     namespace = parser.parse_args(sys.argv[1:])
     addr = namespace.addr

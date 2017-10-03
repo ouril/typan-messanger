@@ -14,24 +14,27 @@ def message_validation(msg):
     try:
         unserilization_data = json.loads(msg.decode("utf-8"))
     except Exception as err:
-        return False
         print("DATA ERROR: {}".format(err))
+    if 'user' in unserilization_data.keys():
+        user_data = unserilization_data['user']
+        if not all(i for i in user_data.values()):
+            return None
     if all(i for i in unserilization_data.values()):
         return unserilization_data
-
+    
 def render_message(
     action='present', 
-    status='online',
+    type_msg='test',
     name='Test',
-    msg='Hello, Server!'
+    status='online'
     ):
     rendered = {
         'action': action,
         'time': str(datetime.now().time()),
-        'type': status,
+        'type': type_msg,
         'user': {
             'account_name': name,
-            'status': msg
-            }phrase
+            'status': status
+            }
     }
     return rendered

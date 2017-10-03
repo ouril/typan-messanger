@@ -1,7 +1,8 @@
 import sys
 from argparse import ArgumentParser
 
-def create_parser(prog, description, port='help in progress', addr='help in progress'):
+def create_parser(prog, description, 
+        port='help in progress', addr='help in progress'):
 
     parser = ArgumentParser(
         prog=prog,
