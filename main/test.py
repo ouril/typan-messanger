@@ -2,12 +2,26 @@ import sys
 import unittest
 import json
 from subprocess import Popen, PIPE
+import pytest
 from client import Client
 from server import Server
 from seriliazer import server_message, message_validation, render_message
 from command_tools import create_parser
 
+def test_server_message():
+    msg = server_message(666, alert='AHAHAHA!!!')
+    assert msg['response'] == 666
+    assert msg['alert'] == 'AHAHAHA!!!'
 
+def test_render_message():
+    msg = render_message(action='unknown', type_msg='try')
+    assert msg['type'] ==  'try'
+    assert msg['action'] == 'unknown'
+
+def test_validation():
+    msg = json.dumps(server_message(code=100))
+    assert message_validation(msg.encode('utf-8'))['response'] == 100
+    
 class TestFunctions(unittest.TestCase):
 
     def test_client_server_connections(self):
