@@ -9,11 +9,12 @@ from socket import (
 )
 from seriliazer import server_message, message_validation
 from command_tools import create_parser
+from log import log
 
 MAX_DATA_RECEIVE = 1024
 MAX_CLIENT_CONNECTION = 10
-RESPONSE_OK = 200
-RESPONSE_ERROR = 400
+
+
 
 
 class Server:
@@ -32,6 +33,7 @@ class Server:
             print('ERROR STARTING SERVER: {}'.format(start_server_error))
             sys.exit(1)
 
+    @log
     def send_response(self, code, client, addr):
         repr_response = server_message(code, HTTPStatus.OK.phrase)
         response = json.dumps(repr_response)
@@ -41,6 +43,7 @@ class Server:
         except OSError as err:
             print('ERROR RESPONSE {0}: {1}'.format(err))
 
+    @log
     def parse_data_from_clietn(self, client, addr, data):
         msg = message_validation(data)
         if msg:
@@ -50,6 +53,7 @@ class Server:
             code = HTTPStatus.BAD_REQUEST.value
         self.send_response(code, client, addr)
 
+    @log
     def start(self):
 
         while True:
