@@ -1,39 +1,22 @@
 import logging
-from datetime import datetime
+import logging.handlers
 
-from functools import wraps
+# Создаем логгеры все в одном месте, потом будем их получить по имени
+# Клиентский логгер
+client_logger = logging.getLogger('client')
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s")
+client_handler = logging.FileHandler("client.log", encoding='utf-8')
+client_handler.setLevel(logging.INFO)
+client_handler.setFormatter(formatter)
+client_logger.addHandler(client_handler)
+client_logger.setLevel(logging.INFO)
+# Серверный логгер
+server_logger = logging.getLogger('server')
+server_handler = logging.handlers.TimedRotatingFileHandler('server.log', when='d')
+server_handler.setFormatter(formatter)
+server_logger.addHandler(server_handler)
+server_logger.setLevel(logging.INFO)
 
-def log(func):
-    @wraps(func)
-    def wrapper(self, *argv, **kwargv):
-        _format = logging.Formatter('%(levelname)-10s%(asctime)s%(message)s')
-        info_log = logging.FileHendler('server.log')
-        info_log.setFormatter(_format)
-        info_log.setLevel(logging.INFO)
-        server_log = logging.getLogger('server')
-        res = func(*args, **kwargs)
-        return func(self, *argv, **kwargv)
-    return wrapper
-
-class Log:
-
-    def __init__(self, 
-                app=str(datetime.today())+'server', 
-                filer=str(datetime.today())+'server.log'):
-        self.app = app
-        self.file = filer
-
-    def __call__(self, func):
-        @wraps(func)
-        def decorated(*args, **kwargs):
-            _format = logging.Formatter('%(levelname)-10s%(asctime)s%(message)s')
-            info_log = logging.FileHendler('server.log')
-            info_log.setFormatter(_format)
-            info_log.setLevel(logging.INFO)
-            server_log = logging.getLogger(self.app)
-            res = func(*args, **kwargs)
-            return res
-        return decorated
 
 
         

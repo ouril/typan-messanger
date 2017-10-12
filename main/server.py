@@ -9,7 +9,7 @@ from socket import (
 )
 from seriliazer import server_message, message_validation
 from command_tools import create_parser
-from log import log
+from decorators import log
 
 MAX_DATA_RECEIVE = 1024
 MAX_CLIENT_CONNECTION = 10
@@ -52,8 +52,7 @@ class Server:
         else:
             code = HTTPStatus.BAD_REQUEST.value
         self.send_response(code, client, addr)
-
-    @log
+    @logs
     def start(self):
 
         while True:
