@@ -7,8 +7,8 @@ from socket import (
     AF_INET,
     SOCK_STREAM
 )
-from seriliazer import render_message, message_validation
-from command_tools import create_parser
+from jim.seriliazer import *
+from tools.command_tools import create_parser
 
 MAX_DATA_RECEIVE = 1024
 
@@ -32,29 +32,17 @@ class Client:
             print('RESPONSE ERROR: {}'.format(disconnect_server_error))
 
         
-    def send_presence_msg(self):
-        msg = json.dumps(render_message()).encode("utf-8")
-        try:
-            self.sock.send(msg)
+    def send_msg(self, msg):
+        msg1 = BaseJim(**dict(message=msg))
+        print(msg1.__dict__)
+        self.sock.send(bytes(msg1))
 
-            print('Client send presence')
-        except OSError as socket_send_msg_error:
-            print('RESPONSE ERROR: {}'.format(
-                socket_send_msg_error)
-            )
+        print('Client send presence')
+        
         data = self.sock.recv(MAX_DATA_RECEIVE)
-        unserialized_data = message_validation(data)
-        if unserialized_data and unserialized_data.get('response') == 200:
-            print('{}! IT\'S WORKED!'.format(
-                unserialized_data.get('alert')
-            ))
-        elif unserialized_data.get('response') == 400:
-            print('REQUEST ERROR: {}'.format(
-                unserialized_data.get('error')
-            )) 
-        else:
-            print('UNKNOWN ERROR')
+        print(data)
         self.disconnect_server()
+        
 
 if __name__ == '__main__':
     parser = create_parser('client', 'TYPAN client')
@@ -62,5 +50,7 @@ if __name__ == '__main__':
     addr = namespace.addr
     port = namespace.port
     client = Client(addr, port)
-    client.send_presence_msg()
+    while True:
+        msg = input()
+        client.send_msg(msg)
     
