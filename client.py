@@ -33,15 +33,13 @@ class Client:
 
         
     def send_msg(self, msg):
-        msg1 = BaseJim(**dict(message=msg))
-        print(msg1.__dict__)
-        self.sock.send(bytes(msg1))
-
+        _msg = JimMessage()
+        _msg.message = msg
+        _msg.action = ''
+        print(bytes(_msg))
+        self.sock.send(bytes(_msg))
         print('Client send presence')
-        
-        data = self.sock.recv(MAX_DATA_RECEIVE)
-        print(data)
-        self.disconnect_server()
+       
         
 
 if __name__ == '__main__':

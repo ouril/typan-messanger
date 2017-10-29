@@ -1,42 +1,19 @@
 import json
 from http import HTTPStatus
-from config import MAX_LEN_MESSAGE
+import datetime
 #from config import *
 #from .errors import MandatoryKeyError, ResponseCodeError, ResponseCodeLenError
+CODES = (200, 400, 500)
+# actions: authenticate, presence, quit, msg, join, leave, probe (server)
+# fields: action, time, user (account_name, status), type, to, from, encoding, message, room
 
+BASE_MSG_DICT = dict(
+    action='presence', 
+    time=str(datetime.datetime.now()), 
+    user='Test', 
+    type='Test'
+)
 
-class HTTPCode(object):
-    def __init__(self):
-        self._status_code = HTTPStatus.OK
-    
-    def __get__(self, instance, instance_type):
-        return self._status_code.value
-
-    def __set__(self, instance, value):
-        if isinstance(HTTPStatus, value):
-            self._status_code = value
-        else: 
-            raise ValueError('Bad type data! You need instanse of HTTPStatus')
-    def __bytes__(self):
-        return self._status_code.value
-
-class MessageText(object):
-    def __init__(self):
-        self._msg = ''
-    
-    def __get__(self, instance, instance_type):
-        return self._msg
-
-    def __set__(self, instance, value):
-        if type(value) == 'str' and len(value) < MAX_LEN_MESSAGE:
-            self._status_code = value
-        else: 
-            raise ValueError('Bad type data! You need instanse of HTTPStatus')
-
-    def __bytes__(self):
-        return self._msg
-
-    
 class BaseJim:
 
     def __init__(self, **kwargs):
@@ -63,7 +40,20 @@ class BaseJim:
         return str(self.__dict__)
 
 
-class JimHTTPResponse(BaseJim):
+class JimMessage(BaseJim):
+    def __init__(self, *args, **kwargs):
+        super(JimMessage, self).__init__(**kwargs)
+        
+class ServerResponse(BaseJim):
+    def __init__(self, *args, **kwargs):
+        self.errors = 'OK'
+        self.status_code = 200
+        super(ServerResponse, self).__init__(**kwargs)
 
-    def __init__(self, code):
-        self.status_code = code
+if __name__ == '__main__':
+    a = JimMessage()
+    a.message = 888
+    b = ServerResponse()
+    b.status_code = 200
+    print(bytes(b))
+    print(bytes(a))

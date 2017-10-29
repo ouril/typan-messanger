@@ -1,25 +1,28 @@
-from socketserver import BaseRequestHandler, TCPServer
+from socketserver import BaseRequestHandler, TCPServer, ThreadingMixIn
 import socket
 import datetime
 import sys
 from http import HTTPStatus
 import logging 
+import json
 
-from jim.seriliazer import BaseJim
+from jim.seriliazer import ServerResponse, JimMessage
 from tools.command_tools import create_parser
 
 class TypanHandler(BaseRequestHandler):
     def handle(self):
-        response = 'Hello world'
-        print('Have request')
         if isinstance(self.request, socket.socket):
-            print('Have request')
+            req = self.request.recv(1024)
+            jim = JimMessage.from_bytes(req)
 
-            response = BaseJim(status=200)
+            print(jim.__dict__)
+            print('Have request 2')
+            response = ServerResponse()
+
             self.request.sendall(bytes(response))
 
-class TypanServer(TCPServer):
-    pass
+class TypanServer(ThreadingMixIn, TCPServer):
+    allow_reuse_address = True
 
 
 if __name__ == '__main__':
