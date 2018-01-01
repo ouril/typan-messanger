@@ -1,15 +1,19 @@
-from socketserver import BaseRequestHandler, TCPServer, ThreadingMixIn
 import socket
 import datetime
 import sys
-from http import HTTPStatus
-import logging 
+import logging
 import json
+from http import HTTPStatus
+from socketserver import BaseRequestHandler, TCPServer, ThreadingMixIn
 
 from jim.seriliazer import ServerResponse, JimMessage
 from tools.command_tools import create_parser
+from tools.log import server_logger
+from tools.decorators import Log
+
 
 class TypanHandler(BaseRequestHandler):
+    @Log()
     def handle(self):
         if isinstance(self.request, socket.socket):
             req = self.request.recv(1024)
@@ -20,6 +24,7 @@ class TypanHandler(BaseRequestHandler):
             response = ServerResponse()
 
             self.request.sendall(bytes(response))
+
 
 class TypanServer(ThreadingMixIn, TCPServer):
     allow_reuse_address = True

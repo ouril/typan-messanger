@@ -1,4 +1,4 @@
-import json 
+import json
 import sys
 from argparse import ArgumentParser
 from http import HTTPStatus
@@ -9,12 +9,13 @@ from socket import (
 )
 from jim.seriliazer import *
 from tools.command_tools import create_parser
+from tools.decorators import Log
 
 MAX_DATA_RECEIVE = 1024
 
 
 class Client:
-
+    @Log()
     def __init__(self, addr, port):
         try:
             self.sock = socket(AF_INET, SOCK_STREAM)
@@ -24,6 +25,7 @@ class Client:
             print('ERROR STARTING TYPAN CLINT: {}'.format(start_server_error))
             sys.exit(1)
 
+    @Log()
     def disconnect_server(self):
         try:
             self.sock.close()
@@ -31,7 +33,7 @@ class Client:
         except OSError as disconnect_server_error:
             print('RESPONSE ERROR: {}'.format(disconnect_server_error))
 
-        
+    @Log()
     def send_msg(self, msg):
         _msg = JimMessage()
         _msg.message = msg
@@ -39,8 +41,7 @@ class Client:
         print(bytes(_msg))
         self.sock.send(bytes(_msg))
         print('Client send presence')
-       
-        
+
 
 if __name__ == '__main__':
     parser = create_parser('client', 'TYPAN client')
@@ -51,4 +52,3 @@ if __name__ == '__main__':
     while True:
         msg = input()
         client.send_msg(msg)
-    

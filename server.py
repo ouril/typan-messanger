@@ -1,6 +1,6 @@
-import json 
+import json
 import sys
-from argparse import ArgumentParser
+import select
 from http import HTTPStatus
 from socket import (
     socket,
@@ -9,12 +9,10 @@ from socket import (
 )
 from seriliazer import server_message, message_validation
 from command_tools import create_parser
-from decorators import log
+from tools.decorators import Log
 
 MAX_DATA_RECEIVE = 1024
 MAX_CLIENT_CONNECTION = 10
-
-
 
 
 class Server:
@@ -33,7 +31,7 @@ class Server:
             print('ERROR STARTING SERVER: {}'.format(start_server_error))
             sys.exit(1)
 
-    @log
+    @Log()
     def send_response(self, code, client, addr):
         repr_response = server_message(code, HTTPStatus.OK.phrase)
         response = json.dumps(repr_response)
@@ -43,16 +41,17 @@ class Server:
         except OSError as err:
             print('ERROR RESPONSE {0}: {1}'.format(err))
 
-    @log
-    def parse_data_from_clietn(self, client, addr, data):
+    @Log()
+    def parse_data_from_cliet(self, client, addr, data):
         msg = message_validation(data)
         if msg:
             print('REQUEST FROM {}'.format(addr[0]))
-            code = HTTPStatus.OK.value 
+            code = HTTPStatus.OK.value
         else:
             code = HTTPStatus.BAD_REQUEST.value
         self.send_response(code, client, addr)
-    @logs
+
+    @Log()
     def start(self):
 
         while True:
@@ -60,8 +59,10 @@ class Server:
             data = client.recv(MAX_DATA_RECEIVE)
             self.parse_data_from_clietn(client, addr, data)
 
+
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod()
     parser = create_parser('server', 'TYPAN server')
     namespace = parser.parse_args(sys.argv[1:])

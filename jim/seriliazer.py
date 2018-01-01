@@ -1,18 +1,20 @@
 import json
 from http import HTTPStatus
 import datetime
-#from config import *
-#from .errors import MandatoryKeyError, ResponseCodeError, ResponseCodeLenError
+
+# from config import *
+# from .errors import MandatoryKeyError, ResponseCodeError, ResponseCodeLenError
 CODES = (200, 400, 500)
 # actions: authenticate, presence, quit, msg, join, leave, probe (server)
 # fields: action, time, user (account_name, status), type, to, from, encoding, message, room
 
 BASE_MSG_DICT = dict(
-    action='presence', 
-    time=str(datetime.datetime.now()), 
-    user='Test', 
+    action='presence',
+    time=str(datetime.datetime.now()),
+    user='Test',
     type='Test'
 )
+
 
 class BaseJim:
 
@@ -43,12 +45,14 @@ class BaseJim:
 class JimMessage(BaseJim):
     def __init__(self, *args, **kwargs):
         super(JimMessage, self).__init__(**kwargs)
-        
+
+
 class ServerResponse(BaseJim):
     def __init__(self, *args, **kwargs):
         self.errors = 'OK'
         self.status_code = 200
         super(ServerResponse, self).__init__(**kwargs)
+
 
 if __name__ == '__main__':
     a = JimMessage()

@@ -4,7 +4,9 @@ import logging.handlers
 # Создаем логгеры все в одном месте, потом будем их получить по имени
 # Клиентский логгер
 client_logger = logging.getLogger('client')
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s")
+formatter = logging.Formatter(
+    "%(asctime)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s"
+)
 client_handler = logging.FileHandler("client.log", encoding='utf-8')
 client_handler.setLevel(logging.INFO)
 client_handler.setFormatter(formatter)
