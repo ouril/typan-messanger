@@ -1,9 +1,6 @@
 import socket
 import datetime
 import sys
-import logging
-import json
-from http import HTTPStatus
 from socketserver import BaseRequestHandler, TCPServer, ThreadingMixIn
 
 from jim.seriliazer import ServerResponse, JimMessage
@@ -13,7 +10,7 @@ from tools.decorators import Log
 
 
 class TypanHandler(BaseRequestHandler):
-    @Log()
+    @Log(server_logger)
     def handle(self):
         if isinstance(self.request, socket.socket):
             req = self.request.recv(1024)

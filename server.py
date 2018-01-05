@@ -11,6 +11,7 @@ from socket import (
 from tools.command_tools import create_parser
 from tools.decorators import Log
 from tools.log import server_logger
+from jim.seriliazer import JimMessage, ServerResponse
 
 MAX_DATA_RECEIVE = 1024
 MAX_CLIENT_CONNECTION = 10
@@ -44,14 +45,13 @@ class Server:
 
     @Log(server_logger)
     def parse_data_from_cliet(self, client, addr, data):
-        msg = message_validation(data)
-        if msg:
-            print('REQUEST FROM {}'.format(addr[0]))
-            code = HTTPStatus.OK.value
-        else:
-            code = HTTPStatus.BAD_REQUEST.value
-        self.send_response(code, client, addr)
 
+        jim = JimMessage.from_bytes(data)
+
+        print(jim.__dict__)
+        print('Have request 2')
+        response = ServerResponse()
+        return response
 
     @Log(server_logger)
     def start(self):
