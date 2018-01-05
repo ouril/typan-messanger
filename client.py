@@ -10,12 +10,13 @@ from socket import (
 from jim.seriliazer import *
 from tools.command_tools import create_parser
 from tools.decorators import Log
+from tools.log import client_logger
 
 MAX_DATA_RECEIVE = 1024
 
 
 class Client:
-    @Log()
+    @Log(client_logger)
     def __init__(self, addr, port):
         try:
             self.sock = socket(AF_INET, SOCK_STREAM)
@@ -25,7 +26,7 @@ class Client:
             print('ERROR STARTING TYPAN CLINT: {}'.format(start_server_error))
             sys.exit(1)
 
-    @Log()
+    @Log(client_logger)
     def disconnect_server(self):
         try:
             self.sock.close()
@@ -33,7 +34,7 @@ class Client:
         except OSError as disconnect_server_error:
             print('RESPONSE ERROR: {}'.format(disconnect_server_error))
 
-    @Log()
+    @Log(client_logger)
     def send_msg(self, msg):
         _msg = JimMessage()
         _msg.message = msg

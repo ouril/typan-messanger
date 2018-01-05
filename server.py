@@ -7,9 +7,10 @@ from socket import (
     AF_INET,
     SOCK_STREAM
 )
-from seriliazer import server_message, message_validation
-from command_tools import create_parser
+# from jim.seriliazer import server_message, message_validation
+from tools.command_tools import create_parser
 from tools.decorators import Log
+from tools.log import server_logger
 
 MAX_DATA_RECEIVE = 1024
 MAX_CLIENT_CONNECTION = 10
@@ -31,7 +32,7 @@ class Server:
             print('ERROR STARTING SERVER: {}'.format(start_server_error))
             sys.exit(1)
 
-    @Log()
+    @Log(server_logger)
     def send_response(self, code, client, addr):
         repr_response = server_message(code, HTTPStatus.OK.phrase)
         response = json.dumps(repr_response)
@@ -41,7 +42,7 @@ class Server:
         except OSError as err:
             print('ERROR RESPONSE {0}: {1}'.format(err))
 
-    @Log()
+    @Log(server_logger)
     def parse_data_from_cliet(self, client, addr, data):
         msg = message_validation(data)
         if msg:
@@ -51,13 +52,27 @@ class Server:
             code = HTTPStatus.BAD_REQUEST.value
         self.send_response(code, client, addr)
 
-    @Log()
-    def start(self):
 
+    @Log(server_logger)
+    def start(self):
+        clients = []
         while True:
-            client, addr = self.sock.accept()
-            data = client.recv(MAX_DATA_RECEIVE)
-            self.parse_data_from_clietn(client, addr, data)
+            try:
+                client, addr = self.sock.accept()
+            except OSError as err:
+                pass
+            else:
+                print('new connection with %s' % str(addr))
+                clients.append(client)
+            finally:
+                w = []
+                try:
+                    r, w, e = select.select([], clients, [], 0)
+                except Exception as err:
+                    pass
+                for s_client in w:
+                    data = s_client.recv(MAX_DATA_RECEIVE)
+                    self.parse_data_from_cliet(client, addr, data)
 
 
 if __name__ == '__main__':
