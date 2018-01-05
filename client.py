@@ -14,9 +14,11 @@ from tools.log import client_logger
 
 MAX_DATA_RECEIVE = 1024
 
+log = Log(client_logger)
+
 
 class Client:
-    @Log(client_logger)
+    @log
     def __init__(self, addr, port):
         try:
             self.sock = socket(AF_INET, SOCK_STREAM)
@@ -26,7 +28,7 @@ class Client:
             print('ERROR STARTING TYPAN CLINT: {}'.format(start_server_error))
             sys.exit(1)
 
-    @Log(client_logger)
+    @log
     def disconnect_server(self):
         try:
             self.sock.close()

@@ -7,7 +7,7 @@ from socket import (
     AF_INET,
     SOCK_STREAM
 )
-# from jim.seriliazer import server_message, message_validation
+
 from tools.command_tools import create_parser
 from tools.decorators import Log
 from tools.log import server_logger
@@ -66,8 +66,9 @@ class Server:
                 clients.append(client)
             finally:
                 w = []
+                r = []
                 try:
-                    r, w, e = select.select([], clients, [], 0)
+                    r, w, e = select.select(clients, clients, [], 0)
                 except Exception as err:
                     pass
                 for s_client in w:
