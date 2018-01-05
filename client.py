@@ -1,16 +1,16 @@
 import json
-import sys
+import typan_messenger.sys
 from argparse import ArgumentParser
 from http import HTTPStatus
-from socket import (
+from typan_messenger.socket import (
     socket,
     AF_INET,
     SOCK_STREAM
 )
-from jim.seriliazer import *
-from tools.command_tools import create_parser
-from tools.decorators import Log
-from tools.log import client_logger
+from typan_messenger.jim.seriliazer import *
+from typan_messenger.tools.command_tools import create_parser
+from typan_messenger.tools.decorators import Log
+from typan_messenger.tools.log import client_logger
 
 MAX_DATA_RECEIVE = 1024
 
@@ -26,7 +26,7 @@ class Client:
             print('TYPAN CLINT ARE READY...')
         except OSError as start_server_error:
             print('ERROR STARTING TYPAN CLINT: {}'.format(start_server_error))
-            sys.exit(1)
+            typan_messenger.sys.exit(1)
 
     @log
     def disconnect_server(self):
@@ -48,7 +48,7 @@ class Client:
 
 if __name__ == '__main__':
     parser = create_parser('client', 'TYPAN client')
-    namespace = parser.parse_args(sys.argv[1:])
+    namespace = parser.parse_args(typan_messenger.sys.argv[1:])
     addr = namespace.addr
     port = namespace.port
     client = Client(addr, port)
