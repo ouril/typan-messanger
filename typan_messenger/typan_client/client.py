@@ -16,7 +16,7 @@ log = Log(client_logger)
 
 
 class Client:
-    @log
+    @Log(client_logger)
     def __init__(self, addr, port):
         try:
             self.sock = socket(AF_INET, SOCK_STREAM)
@@ -26,7 +26,7 @@ class Client:
             print('ERROR STARTING TYPAN CLINT: {}'.format(start_server_error))
             sys.exit(1)
 
-    @log
+    @Log(client_logger)
     def disconnect_server(self):
         try:
             self.sock.close()

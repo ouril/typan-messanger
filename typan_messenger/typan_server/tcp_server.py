@@ -4,13 +4,10 @@ import socketserver as sv
 from typan_messenger.jim.seriliazer import server_jim, Jim
 from typan_messenger.tools.log import server_logger
 from typan_messenger.tools.decorators import Log
-from config import PARAMS_FOR_JIM
-
-log = Log(server_logger)
 
 
 class JimHandler(sv.BaseRequestHandler):
-    @log
+    @Log(server_logger)
     def handle(self):
         while True:
             if isinstance(self.request, socket.socket):
@@ -31,6 +28,3 @@ class JimHandler(sv.BaseRequestHandler):
 
 class TCPThreadingServer(sv.ThreadingMixIn, sv.TCPServer):
     allow_reuse_address = True
-
-
-
