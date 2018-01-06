@@ -3,7 +3,7 @@ from functools import wraps
 
 class Log:
     """
-    Класс декоратор для логирования функций
+    This is decarator for logging functions
     """
 
     def __init__(self, logger):
@@ -11,6 +11,11 @@ class Log:
 
     @staticmethod
     def _create_message(result=None, *args, **kwargs):
+        """
+        This method build body of logging message
+
+        :return: one string
+        """
         message = ''
         if args:
             message += 'args: {} '.format(args)
@@ -21,6 +26,11 @@ class Log:
         return message
 
     def __call__(self, func):
+        """
+        This is decarator realisation with class. There is use __call__ method
+        :param func: its a function
+        :return:
+        """
         @wraps(func)
         def decorated(*args, **kwargs):
             result = func(*args, **kwargs)
