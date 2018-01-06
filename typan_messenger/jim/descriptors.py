@@ -1,5 +1,10 @@
+import datetime as dt
+import http
+
+CODE = [i.value for i in http.HTTPStatus]
+
 class HTTPCode(object):
-    code = CODES
+    code = CODE
     def __init__(self):
         self._status_code = 500
     
@@ -26,4 +31,17 @@ class MessageText(object):
             raise ValueError('Bad type data!')
 
 
+
+class TimeField:
+    def __init__(self):
+        self._time = ''
+
+    def __get__(self, instanse, instanse_type):
+        return self._time
+
+    def __set__(self, instanse, value):
+        if isinstance(value, dt.datetime):
+            self._time = str(value)
+        else:
+            raise ValueError('Bad type data!')
     

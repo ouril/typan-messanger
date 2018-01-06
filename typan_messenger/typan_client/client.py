@@ -1,11 +1,12 @@
-
+import sys
+import datetime as dt
 from socket import (
     socket,
     AF_INET,
     SOCK_STREAM
 )
 from typan_messenger.jim.seriliazer import *
-
+from config import PARAMS_FOR_JIM
 from typan_messenger.tools.decorators import Log
 from typan_messenger.tools.log import client_logger
 
@@ -23,7 +24,7 @@ class Client:
             print('TYPAN CLINT ARE READY...')
         except OSError as start_server_error:
             print('ERROR STARTING TYPAN CLINT: {}'.format(start_server_error))
-            typan_messenger.sys.exit(1)
+            sys.exit(1)
 
     @log
     def disconnect_server(self):
@@ -35,11 +36,12 @@ class Client:
 
     @Log(client_logger)
     def send_msg(self, msg):
-        _msg = JimMessage()
-        _msg.message = msg
-        _msg.action = ''
-        print(bytes(_msg))
-        self.sock.send(bytes(_msg))
+        _msg = PARAMS_FOR_JIM
+        _msg['message'] = msg
+        _msg['action'] = 'presence'
+        _msg['time'] = str(dt.datetime.now())
+        print(bytes(Jim(**_msg)))
+        self.sock.send(bytes(Jim(**_msg)))
         print('Client send presence')
 
 

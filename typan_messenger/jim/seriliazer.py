@@ -1,55 +1,35 @@
 import json
-from http import HTTPStatus
-import datetime
-
-CODES = (200, 400, 500)
-# actions: authenticate, presence, quit, msg, join, leave, probe (server)
-# fields: action, time, user (account_name, status), type, to, from, encoding, message, room
-
-BASE_MSG_DICT = dict(
-    action='presence',
-    time=str(datetime.datetime.now()),
-    user='Test',
-    type='Test'
-)
+import collections as col
+import datetime as dt
+from config import BASE_LIST, PARAMS_FOR_JIM
+Base = col.namedtuple('Jim', BASE_LIST)
 
 
-class BaseJim:
+class Jim(Base):
 
-    def __init__(self, **kwargs):
-        """
-        :param kwargs: Can be deferent
-        """
-        for k, v in kwargs.items():
-            setattr(self, k, v)
+    def to_dict(self):
+        return dict(self._asdict())
 
     def __bytes__(self):
-        """Возможность приводить сообщение сразу в байты bytes(jim_message)
-        """
-        message_json = json.dumps(self.__dict__)
+        message_json = json.dumps(self.to_dict())
         message_bytes = message_json.encode(encoding='utf-8')
         return message_bytes
 
     @classmethod
     def from_bytes(cls, message_bytes):
-        """Возможность создавать сообщение по набору байт
-        """
         message_json = message_bytes.decode(encoding='utf-8')
         message_dict = json.loads(message_json)
         return cls(**message_dict)
 
-    def __str__(self):
-        return str(self.__dict__)
+    def now(self):
+        return self._replace(time=str(dt.datetime.now()))
 
 
-class JimMessage(BaseJim):
-    def __init__(self, *args, **kwargs):
-        super(JimMessage, self).__init__(**kwargs)
-
-
-class ServerResponse(BaseJim):
-    def __init__(self, *args, **kwargs):
-        self.errors = 'OK'
-        self.status_code = 200
-        super(ServerResponse, self).__init__(**kwargs)
-
+def server_jim(code=500, msg='SERVER_ERROR'):
+    params = PARAMS_FOR_JIM
+    params['status'] = code
+    params['message'] = msg
+    params['user'] = 'server'
+    params['action'] = 'answer'
+    server_msg = Jim(**params)
+    return server_msg.now()

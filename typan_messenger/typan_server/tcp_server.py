@@ -1,9 +1,10 @@
 import socket
 import socketserver as sv
 
-from typan_messenger.jim.seriliazer import ServerResponse, JimMessage
+from typan_messenger.jim.seriliazer import server_jim, Jim
 from typan_messenger.tools.log import server_logger
 from typan_messenger.tools.decorators import Log
+from config import PARAMS_FOR_JIM
 
 log = Log(server_logger)
 
@@ -14,14 +15,16 @@ class JimHandler(sv.BaseRequestHandler):
         while True:
             if isinstance(self.request, socket.socket):
                 try:
+
                     req = self.request.recv(1024)
-                    jim = JimMessage.from_bytes(req)
+                    jim = Jim.from_bytes(req)
+                    print(jim)
                 except Exception as err:
                     pass
                 else:
-                    print(jim.__dict__)
+                    print(jim.to_dict())
                     print('Have request from')
-                    response = ServerResponse()
+                    response = server_jim()
                 finally:
                     self.request.sendall(bytes(response))
 

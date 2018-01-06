@@ -1,2 +1,6 @@
 .idea/
-.pyc
+*.pyc
+*.log
+bin/
+*.db
+ENV/
