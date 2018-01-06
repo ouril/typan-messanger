@@ -1,5 +1,8 @@
-from typan_messenger.tools.command_tools import run_server, run_client
 from argparse import ArgumentParser
+
+from typan_messenger.typan_server.models import create_table
+from typan_messenger.tools.command_tools import run_server, run_client
+
 
 if __name__ == '__main__':
     parser = ArgumentParser()
@@ -21,7 +24,7 @@ if __name__ == '__main__':
             # TODO Added args for adding port and addr
             run_server()
         elif args.command == 'serverinit':
-            pass
+            create_table()
         elif args.command == 'clientinit':
             pass
         else:

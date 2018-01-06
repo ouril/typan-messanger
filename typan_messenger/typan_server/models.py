@@ -3,12 +3,11 @@ import os
 
 root = os.path.abspath('.')
 db_path = os.path.join(root, 'server.db')
-conn = sqlite3.connect(db_path)
-
-c = conn.cursor()
 
 
 def create_table():
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
     try:
         c.execute('''CREATE TABLE user
                         (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
@@ -27,6 +26,7 @@ def create_table():
     except Exception as err:
         print('ERROR {} {}'.format(type(err), err))
         os.remove(db_path)
+        conn.close()
     else:
         conn.commit()
     finally:
@@ -34,25 +34,36 @@ def create_table():
         print('DataBase was successfully created!')
 
 
-def new_user():
-    pass
+def new_info(sql, params):
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    try:
+        c.execute(sql, params)
+    except Exception as err:
+        print('ERROR {} {}'.format(type(err), err))
+    else:
+        conn.commit()
+    finally:
+        conn.close()
 
 
-def new_history():
-    pass
+def sql_insert(tb, params, values):
+    return 'INSERT INTO {} ({}) VALUES ({})'.format(tb, params, values)
 
 
-def new_contact():
-    pass
+def get_info(sql, params):
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    try:
+        c.execute(sql, params)
+    except Exception as err:
+        print('ERROR {} {}'.format(type(err), err))
+    else:
+        res = c.fetchall()
+    finally:
+        conn.close()
+        return res
 
 
-def get_user():
-    pass
-
-
-def get_history():
-    pass
-
-
-def get_contacts():
-    pass
+def sql_insert(params, tb):
+    return 'SELECT {} FROM {}'.format(params, tb)
