@@ -18,6 +18,7 @@ log = Log(client_logger)
 class Client:
     @Log(client_logger)
     def __init__(self, addr, port):
+        self.user = 'anonimus'
         try:
             self.sock = socket(AF_INET, SOCK_STREAM)
             self.sock.connect((addr, port))
@@ -35,13 +36,37 @@ class Client:
             print('RESPONSE ERROR: {}'.format(disconnect_server_error))
 
     @Log(client_logger)
-    def send_msg(self, msg):
+    def send_msg(self, msg='', action='presense', to='',
+                 from_user='', encoding='', room=''):
         _msg = PARAMS_FOR_JIM
         _msg['message'] = msg
-        _msg['action'] = 'presence'
+        _msg['action'] = action
+        _msg['from_user'] = from_user
+        _msg['to'] = to
         _msg['time'] = str(dt.datetime.now())
-        print(bytes(Jim(**_msg)))
-        self.sock.send(bytes(Jim(**_msg)))
-        print('Client send presence')
+        _msg['room'] = room
+        _msg['encoding'] = encoding
+        _msg['room'] = room
+        try:
+            self.sock.send(bytes(Jim(**_msg)))
+        except Exception as err:
+            print(err)
+        return _msg
 
+    def login(self):
+        self.user = input("Input username >>>")
+        return self.user
 
+    def get_contact_list(self):
+        msg = self.send_msg(
+            action="contact_list",
+            from_user=self.user,
+            to='server',
+        )
+        return msg
+
+    def add_contact(self, contact):
+        pass
+
+    def del_contact(self, contact):
+        pass

@@ -11,7 +11,7 @@ def create_table():
     try:
         c.execute('''CREATE TABLE user
                         (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-                         login TEXT NOT NULL, 
+                         login TEXT NOT NULL UNIQUE, 
                          info TEXT)''')
         c.execute('''CREATE TABLE history 
                         (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
@@ -20,7 +20,6 @@ def create_table():
                          FOREIGN KEY (id) REFERENCES user(id))''')
         c.execute('''CREATE TABLE contacts
                         (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-                         id_contact INTEGER NOT NULL,
                          FOREIGN KEY (id) REFERENCES user(id),
                          FOREIGN KEY (id_contact) REFERENCES user(id))''')
     except Exception as err:
