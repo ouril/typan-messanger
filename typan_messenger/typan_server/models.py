@@ -98,15 +98,24 @@ class ServerDB:
         return self.get_info(sql)
 
     def add_user_to_base(self, contact):
-        value = "('{}', '{}')".format(contact[0], contact[1])
+        """
+
+        :param contact:
+        :return:
+        """
+        value = "'{}', '{}'".format(contact[0], contact[1])
         sql = self.sql_insert('user', 'login, info', value)
         self.new_info(sql)
 
     def add_contact_to_base(self, contact_name, user):
+        """
+
+        :param contact_name:
+        :param user:
+        :return:
+        """
         id_user = self.get_user_id(user)[0]
-        print(id_user)
         id_contact = self.get_user_id(contact_name)[0]
-        print(id_contact)
         if id_contact:
             value = "{}, {}".format(id_user, id_contact)
             sql = self.sql_insert('contacts', 'id_user, id_contact', value)

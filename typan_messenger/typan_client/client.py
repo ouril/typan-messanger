@@ -59,9 +59,8 @@ class Client:
 
     def get_contact_list(self):
         msg = self.send_msg(
-            action="contact_list",
-            from_user=self.user,
-            to='server',
+            action="get_contacts",
+            from_user=self.user
         )
         return msg
 
