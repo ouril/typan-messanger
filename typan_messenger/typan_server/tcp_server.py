@@ -11,6 +11,12 @@ from .contacts import ServerContactList
 
 class JimHandler(sv.BaseRequestHandler):
 
+    @Log(server_logger)
+    def send_error(self, err):
+        print(err)
+        response = server_jim(code=500, msg=err)
+        self.request.send(bytes(response))
+
     def send_msg(self, msg='', action='presense', to='',
                  from_user='', encoding='', room=''):
         _msg = PARAMS_FOR_JIM
@@ -25,8 +31,16 @@ class JimHandler(sv.BaseRequestHandler):
         try:
             self.request.send(bytes(Jim(**_msg)))
         except Exception as err:
-            print(err)
+            self.send_error(err)
         return _msg
+
+    def send_contact_list(self, jim):
+        contact_list = ServerContactList.build_from_base(jim.user)
+        response = server_jim(code=202, msg=len(contact_list))
+        self.request.send(bytes(response))
+        for contact in contact_list:
+            msg = "{}  {}".format(contact[0], contact[1])
+            self.send_msg(msg=msg, action="contact_list")
 
     @Log(server_logger)
     def handle(self):
@@ -36,20 +50,10 @@ class JimHandler(sv.BaseRequestHandler):
                     req = self.request.recv(1024)
                     jim = Jim.from_bytes(req)
                 except Exception as err:
-                    pass
+                    self.send_error(err)
                 else:
                     if jim.action == "get_contacts":
-                        contact_list = ServerContactList.build_from_base(jim.user)
-                        response = server_jim(code=202, msg=len(contact_list))
-                        self.request.send(bytes(response))
-                        try:
-                            for contact in contact_list:
-                                msg = "{}  {}".format(contact[0], contact[1])
-                                self.send_msg(msg=msg, action="contact_list")
-                        except Exception as err:
-                            print(err)
-                            response = server_jim(code=500, msg=err)
-                            self.request.send(bytes(response))
+                        self.send_contact_list(jim)
                 finally:
                     pass
 
