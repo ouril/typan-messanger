@@ -28,3 +28,6 @@ class ServerContactList(BaseContactList):
     def add_contact(self, contact_name, info):
         super(ServerContactList, self).add_contact(contact_name, info)
         self.db.add_contact_to_base(contact_name, self.user)
+
+    def delete_contact(self, contact_name):
+        self.db.delete_contact(contact_name, self.user)

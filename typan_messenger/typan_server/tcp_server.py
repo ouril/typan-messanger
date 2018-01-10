@@ -34,6 +34,26 @@ class JimHandler(sv.BaseRequestHandler):
             self.send_error(err)
         return _msg
 
+    def add_contact(self, jim):
+        contact_list = ServerContactList.build_from_base(jim.user)
+        try:
+            contact_list.add_contact(jim.message, jim.user)
+        except Exception as err:
+            self.send_error(err)
+        else:
+            response = server_jim(code=201, msg='created contact')
+            self.request.send(bytes(response))
+
+    def delete_contact(self, jim):
+        contact_list = ServerContactList.build_from_base(jim.user)
+        try:
+            contact_list.delete_contact(jim.message, jim.user)
+        except Exception as err:
+            self.send_error(err)
+        else:
+            response = server_jim(code=204, msg='deleted contact')
+            self.request.send(bytes(response))
+
     def send_contact_list(self, jim):
         contact_list = ServerContactList.build_from_base(jim.user)
         response = server_jim(code=202, msg=len(contact_list))
@@ -54,6 +74,10 @@ class JimHandler(sv.BaseRequestHandler):
                 else:
                     if jim.action == "get_contacts":
                         self.send_contact_list(jim)
+                    elif jim.action == "add_contact":
+                        self.add_contact(jim)
+                    elif jim.action == "delete_contact":
+                        self.delete_contact(jim)
                 finally:
                     pass
 

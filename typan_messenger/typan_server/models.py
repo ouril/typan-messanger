@@ -120,3 +120,18 @@ class ServerDB:
             value = "{}, {}".format(id_user, id_contact)
             sql = self.sql_insert('contacts', 'id_user, id_contact', value)
             self.new_info(sql)
+
+    def delete_contact(self, contact_name, user):
+        id_user = self.get_user_id(user)[0]
+        id_contact = self.get_user_id(contact_name)[0]
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        try:
+            c.execute('DELETE FROM contacts WHERE id_user=? and id_contact=?', (id_user, id_contact))
+        except Exception as err:
+            print(err)
+        else:
+            conn.commit()
+        finally:
+            conn.close()
+
