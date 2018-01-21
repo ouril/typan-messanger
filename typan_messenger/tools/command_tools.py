@@ -69,11 +69,7 @@ def run_client():
 
 
 def run_server():
-    parser = create_parser('new_server', 'TYPAN server')
-    namespace = parser.parse_args(sys.argv[1:])
-    addr = namespace.addr
-    port = namespace.port
-    server = TCPThreadingServer((addr, port), JimHandler)
+    server = TCPThreadingServer(('127.0.0.1', 7777), JimHandler)
     try:
         print('Start server {}'.format(server.server_address))
         server.serve_forever()
