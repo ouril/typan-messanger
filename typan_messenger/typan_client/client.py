@@ -53,9 +53,13 @@ class Client:
             print(err)
         return _msg
 
-    def login(self):
-        self.user = input("Input username >>>")
-        return self.user
+    # TODO: Must be exception
+    def login(self, user):
+        if type(user) == 'str':
+            self.user = user
+            return self.user
+        else:
+            return None
 
     def get_contact_list(self):
         msg = self.send_msg(

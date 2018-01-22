@@ -11,7 +11,9 @@ class GuiClient(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.Cancel.clicked.connect(QtWidgets.qApp.quit)
-        #run_client()
+        self.ui.ok.clicked.connect(lambda: run_client())
+        self.ui.textEdit.cursorPositionChanged.connect(lambda: print(self.ui.textEdit.plainText))
+
 
 
 def run_client_gui():

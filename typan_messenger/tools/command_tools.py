@@ -58,11 +58,9 @@ class Runner:
 
 
 def run_client():
-    parser = create_parser('client', 'TYPAN client')
-    namespace = parser.parse_args(sys.argv[1:])
-    addr = namespace.addr
-    port = namespace.port
-    client = Client(addr, port)
+    print('client', 'TYPAN client')
+    client = Client('127.0.0.1', 7777)
+    client.login()
     while True:
         msg = input()
         client.send_msg(msg)
