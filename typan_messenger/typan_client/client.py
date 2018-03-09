@@ -17,7 +17,7 @@ log = Log(client_logger)
 
 class Client:
     @Log(client_logger)
-    def __init__(self, addr, port):
+    def __init__(self, addr='127.0.0.1', port=7777):
         self.user = 'anonimus'
         try:
             self.sock = socket(AF_INET, SOCK_STREAM)
@@ -36,7 +36,7 @@ class Client:
             print('RESPONSE ERROR: {}'.format(disconnect_server_error))
 
     @Log(client_logger)
-    def send_msg(self, msg='', action='presense', to='',
+    def send_msg(self, msg='', action='presense', to='anonym',
                  from_user='', encoding='', room=''):
         _msg = PARAMS_FOR_JIM
         _msg['message'] = msg
@@ -54,7 +54,7 @@ class Client:
         return _msg
 
     # TODO: Must be exception
-    def login(self, user):
+    def login(self, user="anonym"):
         if type(user) == 'str':
             self.user = user
             return self.user

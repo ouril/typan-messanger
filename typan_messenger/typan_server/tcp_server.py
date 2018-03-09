@@ -65,6 +65,7 @@ class JimHandler(sv.BaseRequestHandler):
     @Log(server_logger)
     def handle(self):
         while True:
+            print(self.request)
             if isinstance(self.request, socket.socket):
                 try:
                     req = self.request.recv(1024)

@@ -86,7 +86,7 @@
      <string>Cancel</string>
     </property>
    </widget>
-   <widget class="QCommandLinkButton" name="SEND">
+   <widget class="QCommandLinkButton" name="send">
     <property name="geometry">
      <rect>
       <x>400</x>
@@ -96,7 +96,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>CommandLinkButton</string>
+     <string>SEND</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="textEdit">
@@ -116,7 +116,7 @@
      <x>0</x>
      <y>0</y>
      <width>516</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

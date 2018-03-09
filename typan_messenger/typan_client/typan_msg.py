@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'typan_msg.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -34,15 +34,15 @@ class Ui_MainWindow(object):
         self.Cancel = QtWidgets.QPushButton(self.centralwidget)
         self.Cancel.setGeometry(QtCore.QRect(410, 500, 81, 31))
         self.Cancel.setObjectName("Cancel")
-        self.SEND = QtWidgets.QCommandLinkButton(self.centralwidget)
-        self.SEND.setGeometry(QtCore.QRect(400, 440, 81, 41))
-        self.SEND.setObjectName("SEND")
+        self.send = QtWidgets.QCommandLinkButton(self.centralwidget)
+        self.send.setGeometry(QtCore.QRect(400, 440, 81, 41))
+        self.send.setObjectName("send")
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit.setGeometry(QtCore.QRect(20, 440, 371, 41))
         self.textEdit.setObjectName("textEdit")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 516, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 516, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -57,5 +57,5 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.ok.setText(_translate("MainWindow", "OK"))
         self.Cancel.setText(_translate("MainWindow", "Cancel"))
-        self.SEND.setText(_translate("MainWindow", "CommandLinkButton"))
+        self.send.setText(_translate("MainWindow", "SEND"))
 
