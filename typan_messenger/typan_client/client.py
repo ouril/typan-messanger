@@ -44,7 +44,6 @@ class Client:
         _msg['from_user'] = from_user
         _msg['to'] = to
         _msg['time'] = str(dt.datetime.now())
-        _msg['room'] = room
         _msg['encoding'] = encoding
         _msg['room'] = room
         try:
@@ -69,7 +68,17 @@ class Client:
         return msg
 
     def add_contact(self, contact):
-        pass
+        msg = self.send_msg(
+            msg=contact,
+            action="add_contact",
+            from_user=self.user
+        )
+        return msg
 
     def del_contact(self, contact):
-        pass
+        msg = self.send_msg(
+            action="del_contact",
+            from_user=self.user,
+            msg=contact
+        )
+        return msg
